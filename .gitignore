@@ -1,1 +1,33 @@
-ESP32/SECRETS.h
+# Private agent preparation (existing team preference)
+agent_docs/
+
+# Local credentials; safe example templates remain visible
+SECRETS.*
+!SECRETS.example.*
+.env
+.env.*
+!.env.example
+
+# Android / Gradle local state and outputs
+.gradle/
+.kotlin/
+.idea/
+local.properties
+**/build/
+*.apk
+*.aab
+*.jks
+*.keystore
+
+# Flutter local state
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+
+# OS images and private bench recordings
+/raspberry_pi_hub/images/
+/local_data/
+
+# Machine-specific files
+.DS_Store
