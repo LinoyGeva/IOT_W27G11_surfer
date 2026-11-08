@@ -3,9 +3,7 @@
 ## Details about the project
 
 AeroVision PoC is a smart windsurfing training system. A headless cellular hub
-collects BLE telemetry and streams it to an Everysight HUD and the cloud. It
-supports one-way communication (1:1 or 1:many), enabling coaches to send
-real-time instructions without stopping the session.
+collects BLE telemetry and streams it to an Everysight HUD and the cloud. 
 
 ## Folder description
 
