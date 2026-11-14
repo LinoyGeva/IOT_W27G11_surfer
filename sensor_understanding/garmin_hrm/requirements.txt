@@ -1,0 +1,2 @@
+# Compatible with the Mac's Python 3.9; isolated bench tool, not an app dependency.
+bleak==0.22.3

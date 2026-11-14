@@ -28,6 +28,11 @@ local.properties
 # OS images and private bench recordings
 /raspberry_pi_hub/images/
 /local_data/
+# Private Bluetooth traces, including other nearby device traffic
+/packet_inspection/*.pklg
+/packet_inspection/*.csv
 
 # Machine-specific files
 .DS_Store
+__pycache__/
+*.py[cod]

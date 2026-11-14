@@ -26,6 +26,12 @@ Document public settings in [Parameters](../Parameters/README.md). Component sec
 | Isolation | Rider/session assignments and cloud access rules prevent data mixing |
 | Motion | Axes, calibration and original sample timing are preserved |
 
-Keep standalone hardware diagnostics in [Unit Tests](<../Unit Tests/README.md>). Add automated logic and Android runtime tests when the build project is initialized, with their locations configured in its source sets.
+Keep exploratory sensor receivers, protocol notes and bench experiments in
+[sensor_understanding](../sensor_understanding/README.md), under one subdirectory
+per sensor. Their local decoder/harness regression checks remain alongside those
+tools; they are not the Android/Pi implementation's test suite. Add unit tests
+for production logic and separate Android runtime/hardware tests when the build
+project is initialized, using its configured source sets. See
+[implementation test guidance](<../Unit Tests/README.md>).
 
 For a hardware result, record the commit, device/image/SDK versions, setup, input mode, expected behavior, observed result and limitation. Report measured latency and losses with the clock method and workload. Synthetic or replay input must remain identifiable throughout the pipeline.

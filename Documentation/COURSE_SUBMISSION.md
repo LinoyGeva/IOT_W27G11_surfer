@@ -10,7 +10,7 @@ Based on the [Git submission guide](https://docs.google.com/document/d/12zH31_Rh
 - [ ] Final poster image embedded in the root README.
 - [ ] Documented hardcoded parameters with their meaning and values.
 - [ ] Blank secrets templates; real credentials excluded from Git.
-- [ ] Runnable standalone sensor/device diagnostics in `Unit Tests/`.
+- [ ] Runnable standalone sensor/device diagnostics in `sensor_understanding/` (the selected project layout; the reviewed course guide calls this area `Unit Tests/`).
 - [ ] Final code on the required delivery branch. The guide names MASTER; confirm whether the current `main` is accepted.
 
 The controller folder is named `raspberry_pi_hub/` for the team's selected hardware. The verified guides require component organization, not a specific Android package-folder depth. Preparing directories or templates does not complete an implementation deliverable.

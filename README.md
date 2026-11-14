@@ -12,6 +12,7 @@ AeroVision provides windsurfing telemetry through a heads-up display and a coach
 | --- | --- |
 | [Architecture](Documentation/ARCHITECTURE.md) | Components, source directories and device integration |
 | [Development](Documentation/DEVELOPMENT.md) | Implementation sequence, configuration and verification |
+| [Sensor understanding](sensor_understanding/README.md) | Per-sensor bench tools, protocol notes and investigation evidence |
 | [Course submission](Documentation/COURSE_SUBMISSION.md) | Required deliverables and unresolved course details |
 | [Project proposal](<agent_docs/project proposal.pdf>) | Original proposal; available locally in the ignored agent_docs directory |
 
@@ -26,7 +27,8 @@ raspberry_pi_hub/
 flutter_app/       Coach application
 cloud/             Backend and access rules
 contracts/         Shared data definitions
-Unit Tests/        Standalone hardware diagnostics
+sensor_understanding/  Per-sensor bench tools, protocols and investigation history
+Unit Tests/        Guidance for future implementation tests
 Parameters/        Public configuration catalog
 Documentation/     Design, development and course requirements
 Assets/            Poster and project media
