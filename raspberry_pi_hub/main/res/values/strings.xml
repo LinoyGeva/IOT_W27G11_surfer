@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AeroVision Hub</string>
+    <string name="configure">Pair glasses</string>
+    <string name="connect">Connect</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="adjust">Adjust display</string>
+    <string name="calibrate">Calibrate</string>
+    <string name="send">Send to HUD</string>
+    <string name="hud_hint">Text for the glasses</string>
+    <string name="orientation_none">Orientation: no reading yet</string>
+</resources>

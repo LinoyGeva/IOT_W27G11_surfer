@@ -4,7 +4,7 @@
 
 AeroVision provides windsurfing telemetry through a heads-up display and a coach application. A Raspberry Pi 4 running Android collects sensor data, drives Everysight Maverick glasses, and synchronizes sessions with the cloud.
 
-**Stage:** design and repository preparation. Application projects have not been initialized. Team members: pending confirmation.
+**Stage:** design and repository preparation. The hub Android project is initialized with the Maverick glasses connection (not yet built or hardware-tested); other application projects have not been initialized. Team members: pending confirmation.
 
 ## Project guide
 
