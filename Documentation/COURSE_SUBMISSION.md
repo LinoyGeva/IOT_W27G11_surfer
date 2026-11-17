@@ -1,6 +1,6 @@
 # Course submission
 
-Based on the [Git submission guide](https://docs.google.com/document/d/12zH31_RhYnS6SasSdN8nZV-M_MSXaCOH70FLaj2zVzE/edit) and [connection diagram guide](https://docs.google.com/document/d/1KS7dq1E6zOfB5B8xyIxp4xSCyj1gk2xExZrP9ezTYGI/edit), reviewed 2026-11-08.
+Based on the [Git submission guide](https://docs.google.com/document/d/12zH31_RhYnS6SasSdN8nZV-M_MSXaCOH70FLaj2zVzE/edit) (rechecked 2026-11-14) and [connection diagram guide](https://docs.google.com/document/d/1KS7dq1E6zOfB5B8xyIxp4xSCyj1gk2xExZrP9ezTYGI/edit) (reviewed 2026-11-08).
 
 ## Required artifacts
 
@@ -10,7 +10,7 @@ Based on the [Git submission guide](https://docs.google.com/document/d/12zH31_Rh
 - [ ] Final poster image embedded in the root README.
 - [ ] Documented hardcoded parameters with their meaning and values.
 - [ ] Blank secrets templates; real credentials excluded from Git.
-- [ ] Runnable standalone sensor/device diagnostics in `sensor_understanding/` (the selected project layout; the reviewed course guide calls this area `Unit Tests/`).
+- [ ] Runnable standalone sensor/device diagnostics in `Unit Tests/`, as requested by the course guide. Python isolated checks and standalone Pi health diagnostics live there; sensor-dependent checks are explicitly in `Integration Tests/`, and interactive inspection tools remain in `sensor_understanding/`. See [scope and current verification](<../Unit Tests/README.md>). Remaining hardware cases and final course coverage are incomplete; folder presence alone is not completion.
 - [ ] Final code on the required delivery branch. The guide names MASTER; confirm whether the current `main` is accepted.
 
 The controller folder is named `raspberry_pi_hub/` for the team's selected hardware. The verified guides require component organization, not a specific Android package-folder depth. Preparing directories or templates does not complete an implementation deliverable.

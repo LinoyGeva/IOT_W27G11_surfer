@@ -221,6 +221,25 @@ roughly two-hour source-clock discrepancy. Its cause remains unexplained.
 The comparison summary and reconstructed samples are in the same ignored
 `pklg-20261110/` directory. The original CSV and trace were not changed.
 
+On 2026-11-14, the new Python replay suite in `Unit Tests/vakaros_atlas/test_export.py`
+rechecked all 727 timestamp matches and expanded the comparison beyond angles.
+Latitude and longitude agreed exactly with the reconstructed scaled integers.
+Maximum absolute speed error was `6.35e-6` knots after converting recorded m/s by
+`3600/1852`; course error was `3.41e-5` degrees after radians-to-degrees conversion.
+Every exported altitude equalled the floor of its positive recorded metre value;
+the largest fractional difference was about 0.90001 m. These are observations
+about this export, not a general altitude rounding guarantee.
+
+The export contained declination 0.0 in 31 rows and 5.1 in 696 rows, with no
+independent declination field decoded from the recorded samples. The first live
+heading-like float was 50.9601 versus the final CSV `hdg_true` of 45.7 degrees.
+That roughly 5.26-degree difference does not establish a correction rule because
+the samples are not synchronized. The live scalar at offset 28 was 1.37772,
+whereas the last CSV speed was 1.5 knots; its units remain unresolved.
+
+All three replay checks passed. A source-hashed comparison summary is saved under
+`local_data/unit_tests/20261114T120235311506Z/export-comparison.json`.
+
 ## Direct Mac reception
 
 With the captured activation exchange, the user ran the notification-only

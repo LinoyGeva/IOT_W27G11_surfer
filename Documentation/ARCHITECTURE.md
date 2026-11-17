@@ -12,7 +12,9 @@ flowchart LR
     CLOUD --> COACH[Coach application]
 ```
 
-The hub is one Android application running directly on the Pi. It owns acquisition, processing, local persistence, display and upload. This is the team's selected deployment; compatibility of the Android image, Bluetooth and Maverick SDK still requires physical testing.
+The hub is one Android application running directly on the Pi. Its primary role is to collect sensor readings and transmit them to the glasses and cloud, with processing and local persistence supporting that flow. The Pi screen is an operator/debug panel for connection state, recent readings, errors and troubleshooting. Normal acquisition and transmission must eventually work independently of that panel. The rider's display is the Maverick glasses; the coach uses the Flutter application.
+
+The current Garmin milestone runs acquisition only while its diagnostic activity is visible. Separating acquisition from the screen lifecycle remains required before unattended operation. Android image compatibility for the remaining devices and the Maverick SDK still requires physical testing.
 
 ## Implementation directories
 
@@ -28,7 +30,7 @@ All four folders belong to one Android application. Device code emits readings a
 
 | Device | Interface | First integration result |
 | --- | --- | --- |
-| Garmin HRM-Dual | Android BLE | Real notification and verified flag-aware decoding |
+| Garmin HRM-Dual | Android BLE | [Pi live acquisition, decoding tests and Bluetooth recovery](../raspberry_pi_hub/garmin_hrm/README.md) verified for the foreground milestone |
 | Vakaros Atlas 2 | BLE GATT; [bench protocol](../sensor_understanding/vakaros_atlas/README.md) | Validate screen agreement and the adapter on the Android Pi |
 | Maverick | Android SDK | Sample visible on glasses from the Pi; motion timing/calibration recorded |
 

@@ -134,6 +134,30 @@ packet evidence. It does not turn the other candidates into verified metrics.
 Quaternion values used during the earlier investigation came from recorded VKX
 logs and are not decoded from this live message.
 
+### App CSV fields versus live BLE fields
+
+The app export is a recorded-session reference, not a definition of the live
+notification layout. The repeatable [Python replay checks](<../../Unit Tests/README.md#run-the-private-csv-replay-comparison>) compare it to reconstructed recorded
+samples. Their measured errors and limitations belong to the
+[investigation history](INVESTIGATION.md#9-the-app-export-checked-recorded-angle-interpretation).
+
+| CSV column | Supported interpretation in the recorded export | Live receiver status |
+| --- | --- | --- |
+| `timestamp` | Timezone-qualified recorded sample time; matched by UTC instant | Live clock bytes remain opaque; host reception time is separate |
+| `latitude`, `longitude` | Degrees; matched recorded integers scaled by 1e-7 | Float candidates at 8 and 12; not emitted as verified metrics |
+| `sog_kts` | Speed over ground in knots; matches recorded m/s × 3600/1852 | Offset 28 remains an unvalidated scalar; CSV units must not be assumed for it |
+| `cog` | Course over ground in degrees; matches recorded radians converted to degrees | Not established in the live layout; distinct from orientation heading |
+| `hdg_true` | App-labelled true heading; matches recorded quaternion yaw in this file | Heading-like float at 16 is not a validated match to this export |
+| `heel`, `trim` | Degrees; agree with recorded quaternion roll/pitch for this captured pose range | Angle candidates at 24 and 20, respectively; preserve raw and signed values separately |
+| `altitude_m` | Metres; this positive-altitude export truncates recorded values to integer metres | No live altitude offset established |
+| `declination` | App-labelled magnetic declination; 0.0 and 5.1 observed, without an independent decoded reference | No live field or correction rule established |
+| `q_w`, `q_x`, `q_y`, `q_z` | Quaternion components; match recorded float32 values to CSV rounding | Not decoded from the 35-byte live message |
+
+The recorded-to-live boundary is not synchronized: source timestamps differ by
+roughly two hours. The first live heading-like value also differs from the last
+exported heading, so neither heading corrections nor live speed units are promoted
+from this comparison. CSV column order does not establish BLE byte offsets.
+
 ### Angle extraction and signed display
 
 The receiver reads `struct.unpack_from("<ff", packet, 20)` as `(trim, heel)`.

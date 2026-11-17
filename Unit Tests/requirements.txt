@@ -1,0 +1,2 @@
+# Hardware BLE suites only. Offline/native orchestration uses the standard library.
+-r ../sensor_understanding/vakaros_atlas/requirements.txt
