@@ -54,7 +54,7 @@ Planned quantities for one rider; equipment availability remains to be confirmed
 | Pi Android image and API level | emteria 14.16.0, Android 14 / API 34, arm64-v8a; Maverick handshake verified; image checksum not recorded |
 | Hub build tools and dependencies | Pending |
 | Maverick test build | Gradle 9.1.0, Android Gradle plugin 9.0.1, JDK 25.0.3 |
-| Maverick SDK and device firmware | SDK 2.6.1; firmware reported by SDK: 124; handshake and IMU read verified; [bench limitations](<Unit Tests/maverick/README.md>) |
+| Maverick SDK and device firmware | SDK 2.6.1; firmware reported by SDK: 124; handshake, IMU read and visible HUD write verified; [bench limitations](<Unit Tests/maverick/README.md>) |
 | Flutter and backend dependencies | Pending |
 
 Record versions after successful builds and device tests.

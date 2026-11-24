@@ -16,8 +16,8 @@ test as passed from a build, simulator, or documentation-tool response.
 | 4. HUD write | Independent connection; show a short test message; user confirms visibility |
 
 Each hardware test starts from a fresh SDK session, disconnects and unregisters
-listeners on exit, and requires no previous test run. Phases 1–3 passed;
-phase 4 is not implemented yet.
+listeners on exit, and requires no previous test run. All four phases passed,
+including user validation of IMU movement/value changes and visible HUD blinking.
 
 ## Phase 1
 
@@ -111,6 +111,20 @@ before phase 3 is complete.
 The IMU test turns on a blank display, as in the vendor sensor sample, to keep
 the SDK rendering/sensor pipeline active. This does not test visible HUD content.
 
+## Phase 4 — HUD write
+
+Wear the glasses, then run this test alone:
+
+```sh
+ANDROID_SERIAL=<PI_SERIAL> ./gradlew connectedDebugAndroidTest \
+  -Pandroid.testInstrumentationRunnerArguments.class=org.aerovision.maverick.HudTest
+```
+
+It scans/authenticates independently and displays centered green **MAVERICK OK**
+text, alternating one second visible / one second hidden for 16 seconds. It then
+removes the screen, turns off the display and disconnects. The runner checks
+connection and write completion; the user must confirm visibility and blinking.
+
 ## Laptop logs
 
 Use ADB logcat over USB initially; it needs no extra logging service. The test
@@ -158,3 +172,7 @@ Successful data delivery is separate from the user's physical validation.
   system discovery was active. Those failures remain in ignored local evidence
   under `local_data/maverick/phase3-20261124/`; long-term link/timing robustness
   and calibration are not established by these checks.
+- Phase 4: APK build and lint passed; standalone Pi HUD test passed (one test,
+  zero failures). The user confirmed the green message and blinking were visible.
+  Runner reports, logs, source hashes and manual confirmation are local under
+  `local_data/maverick/phase4-20261124/` (ignored).
