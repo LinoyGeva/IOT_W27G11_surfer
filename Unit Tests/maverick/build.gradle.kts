@@ -1,6 +1,10 @@
 import java.util.Properties
 import java.util.zip.ZipFile
 
+plugins {
+    id("com.android.application") version "9.0.1"
+}
+
 val secrets = Properties().apply {
     val file = file("SECRETS.local.properties")
     if (file.isFile) file.inputStream().use { load(it) }
@@ -11,6 +15,8 @@ val githubToken = providers.environmentVariable("GITHUB_TOKEN")
     .orElse(provider { secrets.getProperty("github.token", "") })
 
 repositories {
+    google()
+    mavenCentral()
     exclusiveContent {
         forRepository {
             maven {
@@ -25,6 +31,40 @@ repositories {
     }
 }
 
+abstract class PrepareSdkKey : DefaultTask() {
+    @get:InputFile abstract val key: RegularFileProperty
+    @get:OutputDirectory abstract val outputDirectory: DirectoryProperty
+
+    @TaskAction fun copyKey() {
+        val source = key.get().asFile
+        check(source.length() > 0) { "Empty root glasses_sdk.key" }
+        val destination = outputDirectory.get().asFile.apply { mkdirs() }
+        source.copyTo(destination.resolve("sdk.key"), overwrite = true)
+    }
+}
+val prepareSdkKey = tasks.register<PrepareSdkKey>("prepareSdkKey") {
+    key.set(rootDir.resolve("../../glasses_sdk.key"))
+    outputDirectory.set(layout.buildDirectory.dir("generated/sdkAssets"))
+}
+
+android {
+    namespace = "org.aerovision.maverick"
+    compileSdk = 36
+    defaultConfig {
+        applicationId = "org.aerovision.maverick"
+        minSdk = 30
+        targetSdk = 36
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+}
+androidComponents.onVariants { variant ->
+    variant.sources.assets?.addGeneratedSourceDirectory(prepareSdkKey, PrepareSdkKey::outputDirectory)
+}
+
 val maverickSdk by configurations.creating {
     isCanBeConsumed = false
     isTransitive = false
@@ -33,6 +73,10 @@ val maverickSdk by configurations.creating {
 dependencies {
     maverickSdk("com.everysight:evskit:2.6.1")
     maverickSdk("com.everysight:nativeevskit:2.6.1")
+    implementation("com.everysight:evskit:2.6.1")
+    implementation("com.everysight:nativeevskit:2.6.1")
+    androidTestImplementation("androidx.test:runner:1.7.0")
+    androidTestImplementation("androidx.test.ext:junit:1.3.0")
 }
 
 tasks.register("verifySdk") {

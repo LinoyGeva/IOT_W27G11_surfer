@@ -4,7 +4,7 @@
 
 AeroVision provides windsurfing telemetry through a heads-up display and a coach application. A Raspberry Pi 4 running Android collects sensor data, drives Everysight Maverick glasses, and synchronizes sessions with the cloud.
 
-**Stage:** design and repository preparation. Application projects have not been initialized. Team members: pending confirmation.
+**Stage:** design and device integration. Maverick hardware tests run on the Android Pi; production application projects have not been initialized. Team members: pending confirmation.
 
 ## Project guide
 
@@ -28,7 +28,7 @@ flutter_app/       Coach application
 cloud/             Backend and access rules
 contracts/         Shared data definitions
 sensor_understanding/  Per-sensor bench tools, protocols and investigation history
-Unit Tests/        Guidance for future implementation tests
+Unit Tests/        Hardware checks and implementation test guidance
 Parameters/        Public configuration catalog
 Documentation/     Design, development and course requirements
 Assets/            Poster and project media
@@ -51,9 +51,10 @@ Planned quantities for one rider; equipment availability remains to be confirmed
 
 | Component | Tested version |
 | --- | --- |
-| Pi Android image and API level | Pending |
+| Pi Android image and API level | emteria 14.16.0, Android 14 / API 34, arm64-v8a; Maverick handshake verified; image checksum not recorded |
 | Hub build tools and dependencies | Pending |
-| Maverick SDK and device firmware | Pending |
+| Maverick test build | Gradle 9.1.0, Android Gradle plugin 9.0.1, JDK 25.0.3 |
+| Maverick SDK and device firmware | SDK 2.6.1; firmware reported by SDK: 124; handshake verified |
 | Flutter and backend dependencies | Pending |
 
 Record versions after successful builds and device tests.

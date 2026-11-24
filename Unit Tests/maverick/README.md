@@ -15,9 +15,9 @@ test as passed from a build, simulator, or documentation-tool response.
 | 3. IMU read | Independent connection; stream live IMU for 30 seconds; user checks movement against values |
 | 4. HUD write | Independent connection; show a short test message; user confirms visibility |
 
-Each hardware test will start from a fresh SDK session, disconnect and unregister
-listeners on exit, and require no previous test run. Tests 2–4 are not implemented
-yet.
+Each hardware test starts from a fresh SDK session, disconnects and unregisters
+listeners on exit, and requires no previous test run. Phases 1–2 passed;
+phases 3–4 are not implemented yet.
 
 ## Phase 1
 
@@ -42,15 +42,43 @@ uses **two separate credentials**:
   Set `github.user` and `github.token` in the ignored `SECRETS.local.properties`
   in this folder, or set `GITHUB_ACTOR` and `GITHUB_TOKEN`.
 
-With Gradle installed, run from the repository root:
+With JDK 17+ configured, run from the repository root:
 
 ```sh
-gradle -p 'Unit Tests/maverick' verifySdk
+'Unit Tests/maverick/gradlew' -p 'Unit Tests/maverick' verifySdk
 ```
 
 This downloads and checks the vendor AAR and JVM library and lists native ABIs. It does not
 compile an Android app or validate the license. Match the reported ABI to the Pi
 before phase 2. No SDK binary or credential belongs in Git.
+
+## Phase 2 — handshake
+
+Requires JDK 17+, Android SDK platform/build tools 36, and the Pi connected to ADB.
+Set `ANDROID_HOME` to the SDK directory. Build/test commands run in this folder.
+The build copies the ignored root glasses key into generated APK assets as
+`sdk.key`; treat the APK as private too.
+
+Power on the glasses near the Pi, enable Bluetooth on the Pi, and close any
+other app connected to the glasses. The Pi needs internet for certificate
+generation and a correct system clock.
+
+```sh
+./gradlew assembleDebug assembleDebugAndroidTest lintDebug
+ANDROID_SERIAL=<PI_SERIAL> ./gradlew connectedDebugAndroidTest \
+  -Pandroid.testInstrumentationRunnerArguments.class=org.aerovision.maverick.HandshakeTest
+```
+
+Keep the Pi screen awake during discovery. The test scans BLE advertisements for
+10 seconds, selecting devices by the Maverick service UUID or the documented
+`EV` + digits name pattern. It requires exactly one candidate; the SDK handshake
+then verifies it is usable glasses. To select an exact advertised name, append
+`-Pandroid.testInstrumentationRunnerArguments.name=EV0662`. To bypass scanning
+with a known address, use
+`-Pandroid.testInstrumentationRunnerArguments.address=AA:BB:CC:DD:EE:FF`.
+It waits up to 60 seconds for authenticated `onReady`, then checks `isReady()`.
+Success is `PASS test=handshake authenticated=true` plus the runner's successful
+test result. Bluetooth `CONNECTED` alone is insufficient.
 
 ## Laptop logs
 
@@ -75,7 +103,17 @@ Successful data delivery is separate from the user's physical validation.
 - Codex registration: `everysight-maverick`, enabled, HTTP endpoint `/mcp`.
 - Gradle 9.1.0: `help` and `verifySdk` passed using local package credentials.
   Verified `NativeEvsKit-jvm-2.6.1.jar` and `evskit-2.6.1.aar`; native ABIs:
-  `arm64-v8a`, `x86_64`. Android build and Pi runtime remain untested.
+  `arm64-v8a`, `x86_64`.
 - Initial missing-credentials gate behaved correctly; the saved GitHub HTTPS
   credential returned HTTP 401. The new local package token resolved that block.
-- ADB: no attached devices. No Pi/glasses hardware result is claimed.
+- Phase 2: Android/test APK builds and `lintDebug` passed (warnings only).
+  Pi handshake passed with automatic discovery and no name/address arguments:
+  85 advertisements, one Maverick candidate, one test, zero failures;
+  `CONNECTED` → `AUTH` → `READY` → PASS → STOP. No IMU/HUD result yet.
+- Initial service-only scan found zero devices; exact-name discovery succeeded.
+  The final automatic scan selects the vendor service UUID or `EV` name pattern.
+  The Pi's wireless ADB address changed during setup; it was reconnected.
+  Its clock was corrected from November 14 to November 24 before authentication.
+- Tested versions are recorded in the [project version table](../../README.md#software-versions).
+  Setup, failed/passed runner reports, logs and tested-source hashes are local
+  under `local_data/maverick/phase2-20261124/` (ignored).

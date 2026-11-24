@@ -9,9 +9,9 @@ They should exercise the production decoders, state handling and other isolated
 logic, using the module's configured test source sets. BLE/hardware checks and
 end-to-end integration checks must be identified separately.
 
-No final Android/Pi unit-test suite is implemented yet. Follow
-[Development](../Documentation/DEVELOPMENT.md) when introducing it; this directory
-does not supply a second application or test framework.
+No production Android/Pi unit-test suite is implemented yet. Follow
+[Development](../Documentation/DEVELOPMENT.md) when introducing it.
 
-[Maverick hardware integration](maverick/README.md) is being introduced in four
-verified phases, starting with MCP and SDK dependency setup.
+[Maverick hardware integration](maverick/README.md) uses a standalone Android
+test fixture in this directory, separate from the production hub. It is being
+introduced in four verified phases, starting with MCP and SDK dependency setup.
