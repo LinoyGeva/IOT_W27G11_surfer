@@ -12,3 +12,6 @@ end-to-end integration checks must be identified separately.
 No final Android/Pi unit-test suite is implemented yet. Follow
 [Development](../Documentation/DEVELOPMENT.md) when introducing it; this directory
 does not supply a second application or test framework.
+
+[Maverick hardware integration](maverick/README.md) is being introduced in four
+verified phases, starting with MCP and SDK dependency setup.
