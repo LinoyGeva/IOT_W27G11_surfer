@@ -16,8 +16,8 @@ test as passed from a build, simulator, or documentation-tool response.
 | 4. HUD write | Independent connection; show a short test message; user confirms visibility |
 
 Each hardware test starts from a fresh SDK session, disconnects and unregisters
-listeners on exit, and requires no previous test run. Phases 1–2 passed;
-phases 3–4 are not implemented yet.
+listeners on exit, and requires no previous test run. Phases 1–3 passed;
+phase 4 is not implemented yet.
 
 ## Phase 1
 
@@ -60,7 +60,8 @@ The build copies the ignored root glasses key into generated APK assets as
 `sdk.key`; treat the APK as private too.
 
 Power on the glasses near the Pi, enable Bluetooth on the Pi, and close any
-other app connected to the glasses. The Pi needs internet for certificate
+other app connected to the glasses and Android's Pair new device screen.
+The Pi needs internet for certificate
 generation and a correct system clock.
 
 ```sh
@@ -79,6 +80,36 @@ with a known address, use
 It waits up to 60 seconds for authenticated `onReady`, then checks `isReady()`.
 Success is `PASS test=handshake authenticated=true` plus the runner's successful
 test result. Bluetooth `CONNECTED` alone is insufficient.
+
+## Phase 3 — IMU
+
+Run this test alone; it scans and authenticates independently:
+
+```sh
+ANDROID_SERIAL=<PI_SERIAL> ./gradlew connectedDebugAndroidTest \
+  -Pandroid.testInstrumentationRunnerArguments.class=org.aerovision.maverick.ImuTest
+```
+
+After `STREAM_START`, hold still for 5 seconds, gently tilt/rotate the glasses,
+then hold still again. The window lasts 30 seconds. Check that acceleration
+changes with tilt, gyroscope values respond to rotation and settle when still,
+and magnetic axes vary with heading. This is user validation, not calibration.
+
+Logs show `acc` in m/s², `gyro` in rad/s and `mag` in mGauss, with the original
+SDK `ts_ns` and Pi receipt time `rx_ms` relative to the window setup. Callbacks
+can arrive in batches. Non-repeated callbacks are counted and values checked for
+finiteness; duplicate timestamps are counted separately. Backwards SDK timestamps
+are preserved and reported with `TIMING_WARNING` and `BACKWARDS`, not rewritten.
+A sensor with no new timestamp for 3 seconds fails the delivery check after
+the initial 5-second grace period. Logs are limited to about two samples per
+second per sensor; log-line count is not a packet-loss measurement.
+
+Sensors are disabled and listeners removed at the end. The runner verifies
+delivery; `manual_validation=pending` requires the user's movement/value check
+before phase 3 is complete.
+
+The IMU test turns on a blank display, as in the vendor sensor sample, to keep
+the SDK rendering/sensor pipeline active. This does not test visible HUD content.
 
 ## Laptop logs
 
@@ -117,3 +148,13 @@ Successful data delivery is separate from the user's physical validation.
 - Tested versions are recorded in the [project version table](../../README.md#software-versions).
   Setup, failed/passed runner reports, logs and tested-source hashes are local
   under `local_data/maverick/phase2-20261124/` (ignored).
+- Phase 3 delivery passed for a 30-second window with the blank display on:
+  non-repeated callbacks `acc=987`, `gyro=987`, `mag=786`; repeated timestamps
+  `acc=2180`, `gyro=2180`, `mag=5`; one backwards magnetometer timestamp.
+  The user watched terminal logs and confirmed expected movement/value changes.
+  The standalone handshake regression and lint passed.
+- Earlier IMU attempts exposed repeated/backwards SDK timestamps, a remote
+  power-off disconnect, and one native Pi Bluetooth assertion/restart while
+  system discovery was active. Those failures remain in ignored local evidence
+  under `local_data/maverick/phase3-20261124/`; long-term link/timing robustness
+  and calibration are not established by these checks.
